@@ -308,8 +308,11 @@ class Consistency(Achievement):
 
 
 class BossFight(Achievement):
+    """
+    Achievement that can be won by beating the player whose name is contained in ~/boss.txt.
+    """
     name = "Boss Fight"
-    description = "Fight the Final Boss"
+    description = "Defeat the Final Boss"
 
     def __init__(self):
         super(BossFight, self).__init__()
@@ -318,7 +321,8 @@ class BossFight(Achievement):
                 self.boss = f.readline().strip()
 
     def applies(self, player, game, opponent, ladder):
-        return self.boss and self.boss == opponent.name
+        won = game.blueScore > game.redScore if player.name == game.bluePlayer else game.redScore > game.blueScore
+        return self.boss and self.boss == opponent.name and won
 
 
 for clz in Achievement.__subclasses__():
