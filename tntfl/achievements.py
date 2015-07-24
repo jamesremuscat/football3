@@ -316,6 +316,7 @@ class BossFight(Achievement):
 
     def __init__(self):
         super(BossFight, self).__init__()
+        self.boss = None
         if os.path.isfile("boss.txt"):
             with open("boss.txt", "r") as f:
                 self.boss = f.readline().strip()
