@@ -2,7 +2,7 @@
 % if game.isDeleted():
   "deleted" : {
     "at" : ${game.deletedAt},
-    "by" : ${game.deletedBy}
+    "by" : "${game.deletedBy}"
   },
 % endif
   "red" : {
@@ -31,7 +31,7 @@
     % for achievement in game.blueAchievements:
       { "name" : "${achievement.name}",
        "description" : "${achievement.description}"
-       }${"," if loop.index < len(game.redAchievements) - 1 else ""}
+       }${"," if loop.index < len(game.blueAchievements) - 1 else ""}
     % endfor
     ]
   },
