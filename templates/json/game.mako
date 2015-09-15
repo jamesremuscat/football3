@@ -2,7 +2,7 @@
 % if game.isDeleted():
   "deleted" : {
     "at" : ${game.deletedAt},
-    "by" : ${game.deletedBy}
+    "by" : "${game.deletedBy}"
   },
 % endif
   "red" : {

@@ -1,5 +1,6 @@
 from collections import Counter, defaultdict
 import datetime
+import os.path
 
 
 def oncePerPlayer(applies):
@@ -282,6 +283,47 @@ class TheDominator(Achievement):
         else:
             self.counts[pairing] = 0
         return self.counts[pairing] == 10
+
+
+class Consistency(Achievement):
+    name = "Nothing if not Consistent"
+    description = "Finish 5 consecutive games with the same score"
+
+    def __init__(self):
+        super(Consistency, self).__init__()
+        self.counts = defaultdict(list)
+
+    def applies(self, player, game, opponent, ladder):
+        score = (game.blueScore, game.redScore) if player.name == game.bluePlayer else (game.redScore, game.blueScore)
+        counts = self.counts[player.name]
+        if counts and counts[0] == score:
+            counts.append(score)
+            if len(counts) == 5:
+                self.counts[player.name] = []
+                return True
+        else:
+            self.counts[player.name] = [score]
+
+        return False
+
+
+class BossFight(Achievement):
+    """
+    Achievement that can be won by beating the player whose name is contained in ~/boss.txt.
+    """
+    name = "Boss Fight"
+    description = "Defeat the Final Boss"
+
+    def __init__(self):
+        super(BossFight, self).__init__()
+        self.boss = None
+        if os.path.isfile("boss.txt"):
+            with open("boss.txt", "r") as f:
+                self.boss = f.readline().strip()
+
+    def applies(self, player, game, opponent, ladder):
+        won = game.blueScore > game.redScore if player.name == game.bluePlayer else game.redScore > game.blueScore
+        return self.boss and self.boss == opponent.name and won
 
 
 for clz in Achievement.__subclasses__():
