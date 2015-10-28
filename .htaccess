@@ -1,7 +1,7 @@
 Options -MultiViews
 
 RewriteEngine on
-RewriteBase /~jrem/tntfl
+RewriteBase /~tlr/tntfl
 
 RewriteRule (.*)/json$ $1?view=json
 

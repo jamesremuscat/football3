@@ -1,4 +1,4 @@
-<%! title = "API | Table Football Ladder 3.0" %>
+<%! title = "API | " %>
 <%! base = "../" %>
 <%inherit file="html.mako" />
 <div class="container-fluid">

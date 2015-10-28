@@ -2,7 +2,8 @@
 
 import cgi
 from time import time
-from tntfl.ladder import TableFootballLadder, Game
+from tntfl.ladder import TableFootballLadder
+from tntfl.game import Game
 from tntfl.web import serve_template
 
 

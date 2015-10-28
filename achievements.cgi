@@ -8,8 +8,11 @@ from collections import OrderedDict
 
 ladder = TableFootballLadder("ladder.txt")
 achievements = {}
-
 for ach in Achievement.achievements:
-    achievements[ach.__class__] = len(ach.players)
+    achievements[ach.__class__] = 0
+
+for player in ladder.getPlayers():
+    for name, amount in player.achievements.items():
+        achievements[name] += amount
 
 serve_template("achievements.mako", ladder=ladder, achievements=OrderedDict(sorted(achievements.iteritems(), reverse=True, key=lambda t: t[1])))

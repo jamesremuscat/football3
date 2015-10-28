@@ -1,1 +1,1 @@
-<%page args="time, base"/><%! from tntfl.ladder import Game %><a href="${base}game/${time}/">${Game.formatTime(time)}</a>
+<%page args="time, base"/><%! from tntfl.game import Game %><a href="${base}game/${time}/">${Game.formatTime(time)}</a>

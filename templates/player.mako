@@ -1,11 +1,11 @@
-<%! title = "Table Football Ladder 3.0" %>
+<%! title = "" %>
 <%! base = "../../" %>
-<%! from tntfl.ladder import Game
+<%! from tntfl.game import Game
 from tntfl.web import get_template %>
 <%inherit file="html.mako" />
 <%
 
-from tntfl.ladder import PerPlayerStat
+from tntfl.player import PerPlayerStat
 
 pps = {}
 
@@ -45,6 +45,7 @@ for game in player.games:
    redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
    sideStyle = "background-color: rgb(" + str(int(round(redness * 255))) + ", 0, "  + str(int(round((1 - redness) * 255))) + ")"
    gd = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
+   skillBounds = player.getSkillBounds()
 %>
           <div class="row">
           ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=("ladder-position inactive" if rank == -1 else "ladder-position ladder-first" if rank == 1 else "ladder-position"))}
@@ -61,13 +62,13 @@ for game in player.games:
           <div class="row">
           ${self.blocks.render("statbox", title="Goals for", body=player.goalsFor)}
           ${self.blocks.render("statbox", title="Goals against", body=player.goalsAgainst)}
-          ${self.blocks.render("statbox", title="GD/game", body=("{:.3f}".format(gd)), classes=("positive" if gd >= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Goal ratio", body=("{:.3f}".format(gd)), classes=("positive" if gd >= 0 else "negative"))}
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Games today", body=player.gamesToday, classes="negative" if player.gamesToday > 3 else "")}
           ${self.blocks.render("statbox", title="10-0 wins", body=tenNilWins)}
-          ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=player.highestSkill['skill'], time=player.highestSkill['time'], base=self.attr.base))}
-          ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=player.lowestSkill['skill'], time=player.lowestSkill['time'], base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['highest']['skill'], time=skillBounds['highest']['time'], base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['lowest']['skill'], time=skillBounds['lowest']['time'], base=self.attr.base))}
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
@@ -181,7 +182,7 @@ for game in player.games:
           <h2 class="panel-title">Most Significant Game</h2>
         </div>
         <div class="panel-body">
-      ${self.blocks.render("game", game=player.mostSignificantGame, base=self.attr.base)}
+      ${self.blocks.render("game", game=player.mostSignificantGame(), base=self.attr.base)}
         </div>
       </div>
       <div class="panel panel-default">

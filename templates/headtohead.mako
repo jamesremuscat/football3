@@ -1,6 +1,6 @@
-<%! title = "Head to Head | Table Football Ladder 3.0" 
+<%! title = "Head to Head | "
 base = "../../../"
-from tntfl.ladder import Game %>
+from tntfl.game import Game %>
 <%inherit file="html.mako" />
 <%
 self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../"
@@ -17,16 +17,19 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
                     </tr>
                               <tr>
           <th>Highest ever skill</th>
-          <td>${"{:.3f}".format(player.highestSkill['skill'])}<br />
-% if player.highestSkill['time'] > 0:
-          at <a href="${self.attr.base}game/${player.highestSkill['time']}/">${Game.formatTime(player.highestSkill['time'])}</a></td>
+<%
+skillBounds = player.getSkillBounds()
+%>
+          <td>${"{:.3f}".format(skillBounds['highest']['skill'])}<br />
+% if skillBounds['highest']['time'] > 0:
+          at <a href="${self.attr.base}game/${skillBounds['highest']['time']}/">${Game.formatTime(skillBounds['highest']['time'])}</a></td>
 % else:
           before first game</td>
 % endif
           <th>Lowest ever skill</th>
-          <td>${"{:.3f}".format(player.lowestSkill['skill'])}<br />
-% if player.lowestSkill['time'] > 0:
-          at <a href="${self.attr.base}game/${player.lowestSkill['time']}/">${Game.formatTime(player.lowestSkill['time'])}</a></td>
+          <td>${"{:.3f}".format(skillBounds['lowest']['skill'])}<br />
+% if skillBounds['lowest']['time'] > 0:
+          at <a href="${self.attr.base}game/${skillBounds['lowest']['time']}/">${Game.formatTime(skillBounds['lowest']['time'])}</a></td>
 % else:
           before first game</td>
 % endif

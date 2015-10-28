@@ -1,7 +1,7 @@
 <%
 import re
 from datetime import datetime
-from tntfl.ladder import Player
+from tntfl.player import Player
 
 def idsafe(text):
   return re.sub("[^A-Za-z0-9\-_\:\.]", "_", text)

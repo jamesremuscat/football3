@@ -11,7 +11,7 @@ headings = [
     "Losses",
     "For",
     "Against",
-    "Avg. GD",
+    "Goal ratio",
     "Overrated",
     "Skill",
     "Trend"

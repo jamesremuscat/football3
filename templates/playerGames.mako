@@ -1,6 +1,6 @@
-<%! title = "Table Football Ladder 3.0" %>
+<%! title = "" %>
 <%! base = "../../../" %>
-<%! from tntfl.ladder import Game %>
+<%! from tntfl.game import Game %>
 <%inherit file="html.mako" />
 <div class="container-fluid">
   <div class="row">

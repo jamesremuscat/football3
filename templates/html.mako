@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${self.attr.title}</title>
+    <title>${self.attr.title}Table Football Ladder 3.1</title>
 
     <!-- Bootstrap -->
     <link href="${self.attr.base}css/bootstrap.min.css" rel="stylesheet">

@@ -9,15 +9,12 @@ def oncePerPlayer(applies):
     '''
     def actualApplies(self, player, game, opponent, ladder):
         return applies(self, player, game, opponent, ladder)
-    return lambda self, p, g, o, l: False if p in self.players else actualApplies(self, p, g, o, l)
+    return lambda self, p, g, o, l: False if self.__class__ in p.achievements.keys() else actualApplies(self, p, g, o, l)
 
 
 class Achievement(object):
 
     achievements = []
-
-    def __init__(self):
-        self.players = []
 
     @staticmethod
     def getAllForGame(player, game, opponent, ladder):
@@ -30,8 +27,6 @@ class Achievement(object):
             for clz in Achievement.achievements:
                 if clz.applies(player, game, opponent, ladder):
                     theseAchievements.append(clz.__class__)
-                    player.achieve(clz.__class__)
-                    clz.players.append(player)
         return theseAchievements
 
 
@@ -142,7 +137,7 @@ class Improver(Achievement):
 
     @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
-        threshold = player.lowestSkill["skill"] + 100
+        threshold = player.getSkillBounds()['lowest']["skill"] + 100
         delta = game.skillChangeToBlue if player.name == game.bluePlayer else -game.skillChangeToBlue
         return player.elo >= threshold and player.elo - delta < threshold
 
@@ -228,13 +223,21 @@ class EarlyBird(Achievement):
     description = "Play and win the first game of the day"
 
     def applies(self, player, game, opponent, ladder):
-        if len(ladder.games) < 2:
+        prevGame = self.getMostRecentGame(game, ladder)
+
+        if prevGame == -1:
             return True
         thisGame = datetime.datetime.fromtimestamp(game.time).date()
-        prevGame = datetime.datetime.fromtimestamp(ladder.games[-2].time).date()
         won = (game.blueScore > game.redScore) if player.name == game.bluePlayer else (game.blueScore < game.redScore)
         return thisGame != prevGame and won
 
+    def getMostRecentGame(self, curGame, ladder):
+        numGames = len(ladder.games)
+        for i in xrange(numGames - 2, 0, -1):
+            game = ladder.games[i]
+            if not game.isDeleted():
+                return datetime.datetime.fromtimestamp(game.time).date()
+        return -1
 
 class Slacker(Achievement):
     name = "Slacker"

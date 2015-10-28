@@ -1,4 +1,4 @@
-<%! title = "Table Football Ladder 3.0" %>
+<%! title = "" %>
 <%! base = "../../" %>
 <%! import os %>
 <%inherit file="html.mako" />

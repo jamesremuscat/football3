@@ -2,8 +2,9 @@
 
 import cgi
 from time import time
-from tntfl.ladder import Game, TableFootballLadder
-from tntfl.web import redirect_302, serve_template
+from tntfl.ladder import TableFootballLadder
+from tntfl.game import Game
+from tntfl.web import redirect_302, fail_404, serve_template
 
 form = cgi.FieldStorage()
 
@@ -13,8 +14,7 @@ if "method" in form:
         if "bluePlayer" in form and "redPlayer" in form:
             redScore = form["redScore"].value if "redScore" in form else 0
             blueScore = form["blueScore"].value if "blueScore" in form else 0
-            game = Game(form["redPlayer"].value, redScore, form["bluePlayer"].value, blueScore, time())
-            ladder.addAndWriteGame(game)
+            game = ladder.addAndWriteGame(form["redPlayer"].value, redScore, form["bluePlayer"].value, blueScore)
             if "view" in form and form["view"].value == "json":
                 serve_template("wrappedGame.mako", game=game)
             else:
@@ -27,5 +27,5 @@ if "method" in form:
                 serve_template("wrappedGame.mako", game=game)
                 found = True
         if not found:
-            print "Status: 404 Not Found"
+            fail_404()
             print
